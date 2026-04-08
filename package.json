@@ -1,0 +1,35 @@
+{
+  "name": "caido-mcp-extended",
+  "version": "1.0.0",
+  "description": "Extended MCP server for Caido — full control over projects, environments, scope, workflows, and Autorize",
+  "type": "module",
+  "bin": {
+    "caido-mcp-extended": "./bin/run.js"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx --watch src/index.ts",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "caido",
+    "mcp",
+    "model-context-protocol",
+    "security",
+    "pentest",
+    "bug-bounty",
+    "autorize",
+    "proxy"
+  ],
+  "author": "roloTeppanyaki",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@types/node": "^25.5.2",
+    "graphql-ws": "^6.0.8",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "ws": "^8.20.0"
+  }
+}
