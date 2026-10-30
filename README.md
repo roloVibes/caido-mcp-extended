@@ -13,6 +13,7 @@ The official `vibe-hacking` MCP covers request browsing, replay, tamper rules, a
 | Scope (update/delete) | read + create only | ✅ |
 | Workflows (create/run/toggle) | — | ✅ |
 | Autorize plugin control | — | ✅ |
+| Burp Suite integration | — | ✅ |
 
 ## Prerequisites
 
@@ -125,6 +126,40 @@ Full programmatic control over the [Autorize](https://github.com/caido-community
 | `autorize_list_templates` | List tested requests + per-profile access states |
 | `autorize_get_results_summary` | Aggregate ALLOW/DENY/UNCERTAIN counts per profile |
 | `autorize_clear_templates` | Wipe all test results |
+
+## Burp Suite Support
+
+This server includes optional support for Burp Suite Professional via its REST API.
+
+### Configuration
+
+- `BURP_URL`: REST API endpoint (default: http://127.0.0.1:1337)
+- `BURP_API_KEY`: Optional API key for authentication
+
+### Tools
+
+All Burp tools are conditionally available only when Burp Suite is reachable:
+
+| Tool | Description |
+|---|---|
+| `burp_scan_start` | Start a new Burp scan |
+| `burp_scan_status` | Get status of a Burp scan |
+| `burp_scan_issues` | Get issues found in a Burp scan |
+| `burp_scanner_status` | Get current status of the Burp scanner queue |
+| `burp_issue_definitions` | Get the catalog of issue definitions in Burp |
+| `burp_proxy_history` | Get proxy history items |
+| `burp_configuration_get` | Get current Burp configuration |
+| `burp_status` | Check if Burp Suite is reachable and get connection details |
+
+### Hard Ceilings
+
+- The REST API CANNOT drive Repeater or Intruder (tabs are user-driven only)
+- Sending a request via an extension's sendRequest SKIPS session handling unless the Extender context is in tools_scope
+- Proxy history is read-only - request/response bodies stay in Burp and must be exported for full traffic analysis
+
+### Verification
+
+Verified live against Caido on macOS; Burp REST surface is fixture-tested, live Burp verification happens on the work machine.
 
 ## Example: Cross-Role Authorization Testing
 
