@@ -4,7 +4,16 @@ import { join } from "path";
 
 // Use a separate token file so we don't conflict with caido-mcp-server's token
 const TOKEN_PATH = join(homedir(), ".caido-mcp", "caido-mcp-extended-token.json");
-const ELECTRON_LS_PATH = join(homedir(), ".config", "Caido", "Local Storage", "leveldb", "000003.log");
+// Electron's Local Storage lives in different places by OS: Linux/Kali keeps
+// ~/.config/Caido, macOS keeps ~/Library/Application Support/Caido. Try both,
+// use whichever exists (fix: the Linux-only path never matched on a Mac).
+const ELECTRON_LS_CANDIDATES = [
+  join(homedir(), ".config", "Caido", "Local Storage", "leveldb", "000003.log"),
+  join(homedir(), "Library", "Application Support", "Caido", "Local Storage", "leveldb", "000003.log"),
+];
+function electronLsPath(): string | null {
+  return ELECTRON_LS_CANDIDATES.find((p) => existsSync(p)) ?? null;
+}
 const CAIDO_URL = process.env.CAIDO_URL || "http://127.0.0.1:8080";
 const GRAPHQL_URL = `${CAIDO_URL}/graphql`;
 
@@ -29,9 +38,10 @@ function isExpired(token: TokenFile): boolean {
 
 // Extract the most recent non-guest token from Electron's localStorage
 function loadElectronToken(): TokenFile | null {
-  if (!existsSync(ELECTRON_LS_PATH)) return null;
+  const lsPath = electronLsPath();
+  if (!lsPath) return null;
   try {
-    const data = readFileSync(ELECTRON_LS_PATH);
+    const data = readFileSync(lsPath);
     const text = data.toString("utf8");
     const regex = /accessToken":"([^"]+)","expiresAt":"([^"]+)","refreshToken":"([^"]*)"[^}]*"scopes":\["[A-Z]/g;
     const matches = [...text.matchAll(regex)];

@@ -1,7 +1,7 @@
 {
   "name": "caido-mcp-extended",
   "version": "1.0.0",
-  "description": "Extended MCP server for Caido — full control over projects, environments, scope, workflows, and Autorize",
+  "description": "Extended MCP server for Caido \u2014 full control over projects, environments, scope, workflows, and Autorize",
   "type": "module",
   "bin": {
     "caido-mcp-extended": "./bin/run.js"
@@ -26,10 +26,12 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@types/node": "^25.5.2",
     "graphql-ws": "^6.0.8",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "ws": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6"
   }
 }
